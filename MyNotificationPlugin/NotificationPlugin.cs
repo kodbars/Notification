@@ -5,7 +5,7 @@ using Resto.Front.Api.Attributes;
 
 namespace MyNotificationPlugin
 {
-    [PluginLicenseModuleId(21016318)] // Замените на ваш ID лицензии
+    [PluginLicenseModuleId(21016318)]
     public sealed class NotificationPlugin : IFrontPlugin
     {
         private readonly Stack<IDisposable> subscriptions = new Stack<IDisposable>();
@@ -14,7 +14,6 @@ namespace MyNotificationPlugin
         {
             PluginContext.Log.Info("Initializing NotificationPlugin");
 
-            // Здесь будем добавлять подписки на уведомления
             subscriptions.Push(new NotificationHandler());
 
             PluginContext.Log.Info("NotificationPlugin started");

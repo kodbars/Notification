@@ -3,9 +3,7 @@
 	<FileName>MyNotificationPlugin.dll</FileName>
 	<TypeName>MyNotificationPlugin.NotificationPlugin</TypeName>
 	<ApiVersion>V8</ApiVersion>
-	<!-- Укажите вашу версию API -->
 	<LicenseModuleId>21016318</LicenseModuleId>
-	<!-- Укажите ваш ID лицензии -->
 	<IsSingleInstance>false</IsSingleInstance>
 	<RestartOnCrash>true</RestartOnCrash>
 </Manifest>

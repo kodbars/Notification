@@ -15,13 +15,13 @@ public class Program
         Console.OutputEncoding = Encoding.Unicode;
 
         var hots = new HostBuilder()
-            .ConfigureServices((hostContext, services) => ConfigureServices(services)) // Задаем конфигурацию
-            .UseConsoleLifetime() // Позволяет поддерживать приложение активным в консоли
-            .Build(); // Собираем
+            .ConfigureServices((hostContext, services) => ConfigureServices(services))
+            .UseConsoleLifetime()
+            .Build();
 
 
         Console.WriteLine("Сервис запущен");
-        await hots.RunAsync(); // Запускаем сервис
+        await hots.RunAsync();
         Console.WriteLine("Сервс остановлен");
     }
 
@@ -30,13 +30,11 @@ public class Program
         AppSettings appSettings = BuildAppSettings();
         services.AddSingleton(appSettings);
 
-        // Подключаем контроллеры сообщений и кнопок
         services.AddTransient<DefaultMessageController>();
         services.AddTransient<TextMessageController>();
 
-        // Регистрируем объект TelegramBotClient c токеном подключения
         services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient(appSettings.BotToken));
-        // Регистрируем постоянно активный сервис бота
+        
         services.AddHostedService<Bot>();
     }
 

@@ -10,9 +10,9 @@ namespace TgBotNotification
 {
     public class Bot : BackgroundService
     {
-        // Клиент к Telegram Bot API
+        
         private ITelegramBotClient _telegramBotClient;
-        // Контроллеры различных видов сообщений
+        
         private TextMessageController _textMessageController;
         private DefaultMessageController _defaultMessageController;
 
@@ -28,7 +28,7 @@ namespace TgBotNotification
             _telegramBotClient.StartReceiving(
                 HandleUpdateAsync,
                 HandleErrorAsync,
-                new ReceiverOptions() { AllowedUpdates = { } }, // Здесь выбираем, какие обновления хотим получать. В данном случае разрешены все
+                new ReceiverOptions() { AllowedUpdates = { } }, 
                 cancellationToken: stoppingToken);
 
             Console.WriteLine("Бот запущен");
@@ -36,7 +36,7 @@ namespace TgBotNotification
 
         async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            // Обрабатываем входящие сообщения из Telegram Bot API: https://core.telegram.org/bots/api#message
+            
             if (update.Type == UpdateType.Message)
             {
                 switch (update.Message!.Type)
@@ -53,17 +53,15 @@ namespace TgBotNotification
 
         Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            // Задаем сообщение об ошибке в зависимости от того, какая именно ошибка произошла
+            
             var errorMessage = exception switch
             {
                 ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
                 _ => exception.ToString()
             };
 
-            // Выводим в консоль информацию об ошибке
             Console.WriteLine(errorMessage);
 
-            // Задержка перед повторным подключением
             Console.WriteLine("Ожидаем 10 секунд перед повторным подключением.");
             Thread.Sleep(10000);
 
