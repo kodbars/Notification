@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Runtime.Remoting;
 using Resto.Front.Api;
-using Resto.Front.Api.Attributes.JetBrains;
-using Resto.Front.Api.Data.Orders;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Threading;
 
 namespace MyNotificationPlugin
@@ -23,29 +19,59 @@ namespace MyNotificationPlugin
 
         public NotificationHandler()
         {
-            // Правильная подписка на событие изменения заказа
-            //subscription = PluginContext.Notifications.OrderChanged.Subscribe(x => OnOrderChanged(x.Entity));
             PluginContext.Log.Info($"Конструктор");
             NotificationProcessing();
         }
 
         private async void NotificationProcessing() 
         {
-            PluginContext.Log.Info($"NotificationProcessing metod start");
-            while (!_cts.Token.IsCancellationRequested) 
+            try
             {
-                var responseGet = await _httpClient.GetAsync(ApiUrl);
-                notificationList = await responseGet.Content.ReadFromJsonAsync<List<Notification>>();
-                PluginContext.Log.Info($"HttpGet статус код:{responseGet.StatusCode.ToString()}");
-                foreach (var notification in notificationList)
+                PluginContext.Log.Info($"NotificationProcessing metod start");
+
+                while (!_cts.Token.IsCancellationRequested)
                 {
                     await Task.Delay(5000);
-                    PluginContext.Operations.AddNotificationMessage(notification.Message, "NotificationPlugin", TimeSpan.FromSeconds(5));
-                    PluginContext.Log.Info($"Уведомление:{notification.Message}");
-                    var responseDelete = await _httpClient.DeleteAsync(ApiUrl + $"/{notification.Id}");
-                    PluginContext.Log.Info($"HttpGet статус код:{responseDelete.StatusCode.ToString()}");
+
+                    var responseGet = await _httpClient.GetAsync(ApiUrl);
+
+                    if (!responseGet.IsSuccessStatusCode)
+                    {
+                        PluginContext.Log.Info($"Ошибка HttpGet StatusCode: {responseGet.StatusCode}");
+                        continue;
+                    }
+                    PluginContext.Log.Info($"HttpGet StatusCode:{responseGet.StatusCode}");
+
+                    notificationList = await responseGet.Content.ReadFromJsonAsync<List<Notification>>();
+                    if (notificationList == null || notificationList.Count == 0)
+                    {
+                        PluginContext.Log.Info($"Нет новых уведомлений");
+                        await Task.Delay(5000);
+                        continue;
+                    }
+
+                    foreach (var notification in notificationList)
+                    {
+
+                        PluginContext.Operations.AddNotificationMessage(notification.Message, "NotificationPlugin", TimeSpan.FromSeconds(15));
+                        PluginContext.Log.Info($"Уведомление:{notification.Message}");
+                        var responseDelete = await _httpClient.DeleteAsync(ApiUrl + $"/{notification.Id}");
+                        if (!responseDelete.IsSuccessStatusCode)
+                        {
+                            PluginContext.Log.Info($"Ошибка HttpGet StatusCode: {responseDelete.StatusCode}");
+                            continue;
+                        }
+                        PluginContext.Log.Info($"HttpDelete StatusCode:{responseDelete.StatusCode}");
+                        await Task.Delay(5000);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                PluginContext.Log.Error($"Ошибка: {ex.Message}");
+                await Task.Delay(30000);
+            }
+            
         }
 
         public void Dispose()
@@ -55,9 +81,9 @@ namespace MyNotificationPlugin
                 _cts.Cancel();
                 subscription?.Dispose();
             }
-            catch (RemotingException)
+            catch (RemotingException ex)
             {
-                // Обработка ошибок при отписке
+                PluginContext.Log.Error($"Ошибка: {ex.Message}");
             }
         }
     }

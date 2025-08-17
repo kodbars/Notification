@@ -26,7 +26,7 @@ namespace TgBotNotification.Controllers
                         Message = message.Text
                     });
                     
-                    await _telegramBotClient.SendMessage(message.Chat.Id, $"Код обработки: {response.EnsureSuccessStatusCode().StatusCode.ToString()}\n Запись в бд прошла успешно", parseMode: ParseMode.Html, cancellationToken: ct);
+                    await _telegramBotClient.SendMessage(message.Chat.Id, $"StatusCode: {response.EnsureSuccessStatusCode().StatusCode}\n Запись в бд прошла успешно", parseMode: ParseMode.Html, cancellationToken: ct);
         }
     }
 }

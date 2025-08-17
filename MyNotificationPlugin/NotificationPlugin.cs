@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Resto.Front.Api;
 using Resto.Front.Api.Attributes;
-using Resto.Front.Api.Attributes.JetBrains;
 
 namespace MyNotificationPlugin
 {
@@ -30,9 +29,9 @@ namespace MyNotificationPlugin
                 {
                     subscription.Dispose();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // Обработка ошибок при отписке
+                    PluginContext.Log.Error($"Ошибка: {ex.Message}");
                 }
             }
 
