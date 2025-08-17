@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationsDb", "Notifica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiNotifications", "WebApiNotifications\WebApiNotifications.csproj", "{FC78B635-D0DA-4788-A4BD-886ADEDB9283}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNotificationPlugin", "MyNotificationPlugin\MyNotificationPlugin.csproj", "{A333E6B7-4A07-4C17-A66B-E828F4E72445}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FC78B635-D0DA-4788-A4BD-886ADEDB9283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC78B635-D0DA-4788-A4BD-886ADEDB9283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC78B635-D0DA-4788-A4BD-886ADEDB9283}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A333E6B7-4A07-4C17-A66B-E828F4E72445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A333E6B7-4A07-4C17-A66B-E828F4E72445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A333E6B7-4A07-4C17-A66B-E828F4E72445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A333E6B7-4A07-4C17-A66B-E828F4E72445}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
